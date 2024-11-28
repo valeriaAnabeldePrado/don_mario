@@ -1,0 +1,46 @@
+.container-reserv {
+  background-image: url("/backg_cuatro.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100dvh;
+  color: rgb(255, 255, 255);
+}
+.overlay-reserv {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(32, 16, 16, 0.673);
+}
+.main-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.card-reserv {
+  color: aliceblue;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 2em 1rem;
+  width: 700px;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.h1-reserv {
+  font-size: 5em;
+
+  margin-bottom: 1em;
+}
+.h2-reserv {
+  font-size: 1.4em;
+  font-weight: 800;
+}

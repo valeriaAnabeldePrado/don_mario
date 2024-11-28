@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import "../app/style.css";
 
 type Argumentos = {
   url: string;
@@ -9,7 +10,7 @@ type Argumentos = {
 const Button = ({ url, children }: Argumentos) => {
   return (
     <Link href={url} passHref>
-      <button>{children}</button>
+      <button className="button-main">{children}</button>
     </Link>
   );
 };

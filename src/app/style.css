@@ -1,0 +1,32 @@
+.backg_home {
+  background-image: url("../../public/backDos.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100dvh;
+  color: rgb(255, 255, 255);
+}
+.overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(32, 16, 16, 0.673);
+}
+.home_h2 {
+  align-self: center;
+  font-size: 5em;
+}
+/* buttons */
+.button-main {
+  border: 2px solid #fff;
+  border-radius: 30px;
+  padding: 1rem;
+  width: 35vh;
+  font-size: 1.4em;
+  font-weight: 800;
+  transition: all 0.2s ease-in-out;
+}
+
+.button-main:hover {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}

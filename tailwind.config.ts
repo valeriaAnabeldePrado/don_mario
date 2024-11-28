@@ -1,11 +1,13 @@
-import type { Config } from "tailwindcss";
 import daisyui from "daisyui";
+import { nextui } from "@nextui-org/react";
 
-const config: Config = {
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -15,6 +17,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [daisyui],
+  darkMode: "class",
+  plugins: [daisyui, nextui()],
 };
-export default config;

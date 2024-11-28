@@ -1,7 +1,11 @@
 "use client";
 import { getData } from "mario/componnets/hooks/useFetch";
+import { getReservas } from "mario/componnets/hooks/useFetch";
+import { useState } from "react";
 //import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Calendar } from "@nextui-org/react";
+import { today, getLocalTimeZone } from "@internationalized/date";
 
 export type FormValues = {
   lastName: string;
@@ -11,6 +15,7 @@ export type FormValues = {
 const ChekReservation = () => {
   // const [responseOk, setResponseOk] = useState(false);
   // const [dataReserv, setDataReserv] = useState({});
+  const [listaOk, setListaOk] = useState();
   const { register, handleSubmit } = useForm<FormValues>();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -25,6 +30,12 @@ const ChekReservation = () => {
     }
   };
 
+  const obtenerReservas = async () => {
+    const listaReservas = await getReservas();
+    setListaOk(listaReservas);
+    console.log(listaReservas);
+  };
+  console.log(listaOk);
   return (
     <main>
       <h1>Consulta tu reserva</h1>
@@ -39,6 +50,12 @@ const ChekReservation = () => {
       {/* {responseOk && (
         <ModalData {...datareserv}/>
       ) } */}
+      <button onClick={obtenerReservas}>Obtener reservass</button>
+      <Calendar
+        aria-label="Date (Max Date Value)"
+        defaultValue={today(getLocalTimeZone())}
+        maxValue={today(getLocalTimeZone())}
+      />
     </main>
   );
 };

@@ -1,0 +1,76 @@
+.form-main {
+  width: 80%;
+}
+label {
+  font-size: 1.2rem;
+  padding: 1rem 0;
+  font-weight: 800;
+}
+.buttont-cont {
+  display: flex;
+  gap: 3rem;
+  flex-direction: column;
+
+  margin-bottom: 1rem;
+}
+.btn-form {
+  color: aliceblue;
+  font-weight: 900;
+  font-size: 1.2em;
+}
+.btn-form:hover {
+  background-color: rgba(219, 219, 219, 0.312);
+}
+.comensales-btn {
+  border-radius: 30px;
+  padding: 0.5rem;
+  width: 70px;
+  border: 2px solid #fff;
+}
+.padding-t {
+  margin-top: 3rem;
+}
+.padding-b {
+  margin-bottom: 3rem;
+}
+input {
+  border-radius: 30px;
+  padding: 1rem;
+  border: 2px solid #fff;
+  background-color: transparent;
+}
+.margen {
+  margin-top: 1rem;
+}
+.franja {
+  border: 2px solid #fff;
+  border-radius: 30px;
+  padding: 0.8rem;
+  width: 230px;
+  font-size: 1.4em;
+  font-weight: 800;
+  transition: all 0.2s ease-in-out;
+}
+.container-opacity {
+  display: none;
+}
+.custom-calendar {
+  background-color: rgba(219, 219, 219, 0.312);
+  width: 350px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.bg-content1 {
+  background-color: rgba(219, 219, 219, 0.033);
+}
+.subpixel-antialiased {
+  color: #fff;
+}
+.text-default-500 {
+  color: #fff !important;
+}
+th {
+  color: #fff;
+}
