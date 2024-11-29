@@ -22,7 +22,7 @@ export default function Home() {
         <section
           className={`flex justify-center align-middle w-full gap-10 ${poppins.className}`}
         >
-          <Button url="/dashboard/auth">Reservar</Button>
+          <Button url="/dashboard/login">Reservar</Button>
           <Button url="/dashboard/check_reserv">Consulta tu reserva</Button>
         </section>
       </section>

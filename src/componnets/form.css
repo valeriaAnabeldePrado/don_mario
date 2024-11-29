@@ -104,6 +104,10 @@ th {
   padding-top: 2rem;
   font-size: 1.2rem;
 }
+.margen-top-auth {
+  margin-top: 1rem;
+  font-weight: 600;
+}
 .container-opacity {
   display: none;
 }

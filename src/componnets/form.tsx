@@ -48,7 +48,7 @@ const FormReservation = () => {
     const fetchPostDataForm = async () => {
       try {
         const respuesta = await postData(
-          "http://localhost:1234/reservas",
+          "https://app-reservas-express-mondodb-production.up.railway.app/reservas",
           formData
         );
         console.log(respuesta);
@@ -86,7 +86,7 @@ const FormReservation = () => {
       const fetchHorariosDispo = async () => {
         try {
           const respuesta = await getHorasDisponible(
-            "http://localhost:1234/calendario/dias/",
+            "https://app-reservas-express-mondodb-production.up.railway.app/calendario/dias/",
             selectDate,
             turnoFranja,
             selectComenzales

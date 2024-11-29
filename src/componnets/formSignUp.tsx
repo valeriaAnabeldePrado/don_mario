@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import "./form.css";
-import {  postData } from "./hooks/useFetch";
+import { postData } from "./hooks/useFetch";
 
 export type InputsAuth = {
   userName: string;
@@ -29,7 +29,7 @@ const FormSignUp = () => {
     const fetchPostDataForm = async () => {
       try {
         const respuesta = await postData(
-          "http://localhost:1234/auth/register",
+          "https://app-reservas-express-mondodb-production.up.railway.app/auth/register",
           formData
         );
         console.log(respuesta);

@@ -27,12 +27,15 @@ export const getData = async (url: string, dataReservation: FormValues) => {
 };
 export const getReservas = async () => {
   try {
-    const response = await fetch("http://localhost:1234/reservas", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://app-reservas-express-mondodb-production.up.railway.app/reservas",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       throw new Error(errorData?.message || `Error: ${response.status}`);
