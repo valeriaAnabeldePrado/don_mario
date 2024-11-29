@@ -11,6 +11,7 @@ const freckleFace = Abril_Fatface({
   weight: "400",
 });
 export default function Home() {
+  ///dashboard/reservation
   return (
     <div className="backg_home relative">
       <div className="overlay"></div>
@@ -21,7 +22,7 @@ export default function Home() {
         <section
           className={`flex justify-center align-middle w-full gap-10 ${poppins.className}`}
         >
-          <Button url="/dashboard/reservation">Reservar</Button>
+          <Button url="/dashboard/auth">Reservar</Button>
           <Button url="/dashboard/check_reserv">Consulta tu reserva</Button>
         </section>
       </section>

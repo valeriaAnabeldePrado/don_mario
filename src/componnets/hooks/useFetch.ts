@@ -1,18 +1,4 @@
 import { FormValues } from "mario/app/dashboard/check_reserv/page";
-import { Inputs } from "../form";
-
-export const postData = async (url: string, bodyDataForm: Inputs) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(bodyDataForm),
-    });
-    return response;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-};
 
 export const getData = async (url: string, dataReservation: FormValues) => {
   try {
@@ -87,6 +73,28 @@ export const getHorasDisponible = async (
     return await response.json();
   } catch (error) {
     console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const postData = async <T>(url: string, bodyDataForm: T) => {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodyDataForm),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(JSON.stringify(errorData));
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en la petición:", error);
     throw error;
   }
 };

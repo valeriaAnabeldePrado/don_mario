@@ -4,26 +4,20 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { Calendar } from "@nextui-org/react";
 import { today, getLocalTimeZone } from "@internationalized/date";
 import "./form.css";
-import { getHorasDisponible } from "./hooks/useFetch";
-
-//import { postData } from "./hooks/useFetch";
+import { getHorasDisponible, postData } from "./hooks/useFetch";
 
 export type Inputs = {
-  name: string;
-  lastname: string;
-  email: string;
-  selectComenzales: number;
-  selectService: string;
-  date: string;
-  time: string;
+  fecha: string;
+  turno: string;
   hora: string;
+  cantidadPersonas: number;
 };
 
 export type Horario = {
   disponible: boolean;
   fecha: string;
-  horarios: string[]; // Array of available times as strings (if any)
-  tipo: "no-disponible-cerrado" | "disponible"; // Enum for types of availability
+  horarios: { hora: string; disponible: boolean }[];
+  tipo: "no-disponible-cerrado" | "disponible";
 };
 
 const people = [1, 2, 3, 4, 5, 6];
@@ -32,33 +26,37 @@ const franja = ["almuerzo", "cena"];
 const FormReservation = () => {
   const [stepTwoVisible, setStepTwoVisible] = useState(false);
   const [stepThreeVisible, setStepThreeVisible] = useState(false);
+  const [stepFour, setStepFour] = useState(false);
+  const [stepFibe, setStepFibe] = useState(false);
 
   const [visibleTime, setVisibleTime] = useState(false);
   const [horasDisponobles, setHorasDisponobles] = useState<Horario[]>([]);
-  const [confirmOk, setConfirmOk] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: "",
-    lastname: "",
-    email: "",
-    selectedComezales: 0,
-    selectService: "",
-    date: "",
-    time: "",
+    fecha: "",
+    turno: "",
     hora: "",
+    cantidadPersonas: 0,
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { handleSubmit, watch, setValue } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
-    //const respuesta = await postData("endopoint", data);
+    setStepFibe(true);
+
+    const fetchPostDataForm = async () => {
+      try {
+        const respuesta = await postData(
+          "http://localhost:1234/reservas",
+          formData
+        );
+        console.log(respuesta);
+      } catch (error) {
+        console.error("Error fetching ", error);
+      }
+    };
+    fetchPostDataForm();
   };
 
   const isSunday = (date: {
@@ -70,13 +68,10 @@ const FormReservation = () => {
     return jsDate.getDay() === 0;
   };
 
-  const selectComenzales = watch("selectComenzales");
-  const selectDate = watch("date");
-  const selectServiceFranja = watch("selectService");
+  const selectComenzales = watch("cantidadPersonas");
+  const selectDate = watch("fecha");
+  const turnoFranja = watch("turno");
   const selectHoraReserva = watch("hora");
-  const name = watch("name");
-  const lastname = watch("lastname");
-  const email = watch("email");
 
   useEffect(() => {
     if (selectComenzales) {
@@ -85,7 +80,7 @@ const FormReservation = () => {
     if (selectDate) {
       setVisibleTime(true);
     }
-    if (selectServiceFranja) {
+    if (turnoFranja) {
       setStepThreeVisible(true);
       //fetch horas dispo
       const fetchHorariosDispo = async () => {
@@ -93,7 +88,7 @@ const FormReservation = () => {
           const respuesta = await getHorasDisponible(
             "http://localhost:1234/calendario/dias/",
             selectDate,
-            selectServiceFranja,
+            turnoFranja,
             selectComenzales
           );
           setHorasDisponobles(respuesta);
@@ -105,27 +100,19 @@ const FormReservation = () => {
       fetchHorariosDispo();
     }
     if (selectHoraReserva) {
-      setConfirmOk(true);
+      setStepFour(true);
     }
     setFormData({
-      name: name || "",
-      lastname: lastname || "",
-      email: "",
-      selectedComezales: selectComenzales || 0,
-      selectService: selectServiceFranja || "",
-      date: selectDate,
-      time: "",
+      fecha: selectDate,
+      turno: turnoFranja || "",
       hora: selectHoraReserva || "",
+      cantidadPersonas: selectComenzales || 0,
     });
-  }, [
-    selectComenzales,
-    selectDate,
-    selectServiceFranja,
-    selectHoraReserva,
-    name,
-    lastname,
-    email,
-  ]);
+  }, [selectComenzales, selectDate, turnoFranja, selectHoraReserva]);
+
+  const filteredHoras = horasDisponobles.filter(
+    (lahora) => lahora.fecha.split("T")[0] === selectDate
+  );
 
   return (
     <>
@@ -138,35 +125,31 @@ const FormReservation = () => {
             stepTwoVisible ? `container-opacity` : ""
           }`}
         >
-          <label>Nombre</label>
-          <input {...register("name", { required: true })} />
-          <label>Apellido</label>
-          <input {...register("lastname", { required: true })} />
-          {errors.lastname && <span>This field is required</span>}
+          <h2 className="h2-subtext">
+            Para poder realizar la reserva debes ingresar todos los datos
+            solicitados, muchas gracias por elegirnos!
+          </h2>
           <label className="padding-t">Cantidad de comensales</label>
-          <div className="flex justify-between w-full">
+          <div className="flex justify-between w-full container-b">
             {people.map((user) => (
               <button
-                className="btn-form comensales-btn"
+                className="btn-form comensales-btn "
                 key={user}
                 type="button"
-                onClick={() => setValue("selectComenzales", user)}
+                onClick={() => setValue("cantidadPersonas", user)}
               >
                 {user}
               </button>
             ))}
           </div>
         </section>
-
         {stepTwoVisible && (
           <section
             className={`flex flex-col ${
               stepThreeVisible ? `container-opacity` : ""
             }`}
           >
-            <label className="padding-b">
-              Selecciona la fecha luego la preferencia del servicio
-            </label>
+            <label>Selecciona la fecha luego la preferencia del servicio</label>
             <div className="flex justify-around gap-10 ">
               <Calendar
                 className="custom-calendar"
@@ -174,7 +157,7 @@ const FormReservation = () => {
                 isDateUnavailable={isSunday}
                 defaultValue={today(getLocalTimeZone())}
                 minValue={today(getLocalTimeZone())}
-                onChange={(value) => setValue("date", value?.toString() || "")}
+                onChange={(value) => setValue("fecha", value?.toString() || "")}
               />
 
               <div className="buttont-cont margen">
@@ -184,7 +167,7 @@ const FormReservation = () => {
                     disabled={visibleTime ? false : true}
                     className="btn-form franja"
                     key={f}
-                    onClick={() => setValue("selectService", f)}
+                    onClick={() => setValue("turno", f)}
                   >
                     {f}
                   </button>
@@ -195,44 +178,72 @@ const FormReservation = () => {
         )}
 
         {stepThreeVisible && (
-          <div>
-            <label>Seleccione la hora disponible</label>
-            <div className="buttont-cont margen">
-              {horasDisponobles.map((hora, index) => (
+          <div
+            className={`container-horarios-reserva ${
+              stepFour ? `container-opacity` : ""
+            }`}
+          >
+            <label className="margen-b">Seleccione la hora disponible</label>
+            <div className=" flex justify-between items-center container-horas">
+              {horasDisponobles.map((lahora, index) => (
                 <div key={index}>
-                  <p>{hora.tipo}</p>
-                  <p>{hora.disponible}</p>
-                  <p>
-                    {hora.horarios.map((item) => (
-                      <p key={index}>{item.hora}</p>
-                    ))}
+                  <p
+                    className={`${
+                      filteredHoras.includes(lahora)
+                        ? "font-bold text-orange-300"
+                        : ""
+                    }`}
+                  >
+                    {lahora.fecha.split("T")[0]}
                   </p>
+                  <p>{lahora.disponible ? "Disponible" : "No disponible"}</p>
+                  <div className="flex flex-col">
+                    {lahora.horarios.map((item, idx) => (
+                      <button
+                        key={idx}
+                        className="btn-form border-btn-form"
+                        type="button"
+                        onClick={() => setValue("hora", item.hora)}
+                      >
+                        {item.hora}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         )}
-        {/* <button
-                  className="btn-form"
-                  type="button"
-                  key={hora}
-                  onClick={() => setValue("hora", hora)}
-                >
-                  {}
-                </button> */}
-        {confirmOk && (
-          <>
-            <div>
-              <h2>Confirma la reserva?</h2>
-              <p>{formData.name}</p>
-              <p>{formData.email}</p>
-              <p>{formData.lastname}</p>
-              <p>{formData.date}</p>
-              <p>{formData.selectedComezales}</p>
-              <p>{formData.time}</p>
-            </div>
-            <button type="submit">enviar</button>
-          </>
+        {stepFour && (
+          <div
+            className={`${
+              stepFibe
+                ? `container-opacity`
+                : `container-horarios-reserva flex flex-col gap-10`
+            }`}
+          >
+            <h2 className="text-center font-semibold text-lg">
+              Confirmar la reserva?
+            </h2>
+            <section className="container-confirm">
+              <p>Cantidad de comenzales: {formData.cantidadPersonas}</p>
+              <p>Fecha seleccionada: {formData.fecha}</p>
+              <p>Hora seleccionada: {formData.hora}</p>
+            </section>
+            <button
+              type="submit"
+              className="text-center self-center btn-form franja"
+            >
+              enviar
+            </button>
+          </div>
+        )}
+        {stepFibe && (
+          <div className="text-center">
+            <h2 className="text-center font-semibold text-lg">
+              Reserva exitosa muchas gracias!
+            </h2>
+          </div>
         )}
         <br />
       </form>
