@@ -105,8 +105,16 @@ th {
   font-size: 1.2rem;
 }
 .margen-top-auth {
-  margin-top: 1rem;
+  position: absolute;
+  right: 0;
+  bottom: -50px;
   font-weight: 600;
+}
+.text-login {
+  margin-top: 1.2rem;
+}
+.opacidad-ok {
+  opacity: 0;
 }
 .container-opacity {
   display: none;

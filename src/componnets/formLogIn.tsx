@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import "./form.css";
 import { postData } from "./hooks/useFetch";
@@ -10,6 +10,7 @@ export type InputsAuthLogin = {
 };
 
 const FormLogIn = () => {
+  const [response, setresponse] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,6 +36,7 @@ const FormLogIn = () => {
     fetchPostDataForm();
 
     reset();
+    setresponse(true);
   };
 
   return (
@@ -54,6 +56,9 @@ const FormLogIn = () => {
           Ingresar
         </button>
       </form>
+      <h2 className={response ? `text-login` : `text-login opacidad-ok`}>
+        Direccion enviada! ingresa a tu mail para continuar con la reserva
+      </h2>
       <h2 className="margen-top-auth">
         <Link href={"/dashboard/auth"}>No tenes usuario? registrate</Link>
       </h2>
